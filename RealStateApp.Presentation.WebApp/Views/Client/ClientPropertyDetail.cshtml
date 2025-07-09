@@ -1,0 +1,160 @@
+﻿@*Views/Client/ClientPropertyDetail*@
+
+@model RealStateApp.Core.Application.ViewModels.Property.PropertyDetailViewModel
+
+@{
+    var agent = (RealStateApp.Core.Application.ViewModels.Agent.AgentViewModel)ViewBag.Agent;
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Property Details -->
+        <div class="col-lg-8">
+            <h2 class="text-primary">@Model.Property.UniqueCode</h2>
+            <h4 class="text-success">$@Model.Property.Price</h4>
+            <p class="text-muted">@Model.Property.RoomCount rooms, @Model.Property.BathroomCount bathrooms, @Model.Property.SizeInMeters m²</p>
+            <p><strong>Type:</strong> @Model.Property.PropertyType</p>
+            <p><strong>Sale Type:</strong> @Model.Property.SaleType</p>
+            <p class="">Descripcion: @Model.Property.Description</p>
+            <!-- Property Images -->
+            <div class="row g-3 mt-4">
+                @if (Model.Property.ImageUrls.Any())
+                {
+                    @foreach (var imageUrl in Model.Property.ImageUrls)
+                    {
+                        <div class="col-md-6">
+                            <img src="@imageUrl" class="img-fluid rounded" alt="Property Image">
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted">No images available for this property.</p>
+                }
+            </div>
+
+            <!-- Improvements -->
+            @if (Model.Property.Improvements?.Any() ?? false)
+            {
+                <h5 class="mt-4">Improvements</h5>
+                <ul>
+                    @foreach (var improvement in Model.Property.Improvements)
+                    {
+                        <li>@improvement.Name: @improvement.Description</li>
+                    }
+                </ul>
+            }
+        </div>
+
+        <!-- Chat Section -->
+        <div class="col-lg-4">
+            <div class="card border-primary shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5>Chat with Agent</h5>
+                </div>
+                <div class="card-body">
+                    <div id="chat-box" class="mb-3 border p-3" style="max-height: 300px; overflow-y: auto;">
+                        @if (Model.Messages.Any())
+                        {
+                            @foreach (var message in Model.Messages)
+                            {
+                                <div class="mb-2">
+                                    <strong class="text-@(message.IsSender ? "primary" : "secondary")">
+                                        @(message.IsSender ? "You" : "Agent"):
+                                    </strong>
+                                    <span>@message.Message</span>
+                                    <small class="text-muted d-block">@message.CreatedAt?.ToString("g")</small>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted text-center">No messages yet. Start the conversation!</p>
+                        }
+                    </div>
+
+                    <!-- Chat Input -->
+                    <form asp-action="SendMessage" method="post">
+                        <input type="hidden" name="propertyId" value="@Model.Property.Id" />
+                        <div class="input-group">
+                            <input type="text" name="message" class="form-control" placeholder="Type your message..." required />
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offers Section -->
+    <div class="mt-4">
+        <h2>Your Offers</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Offers.Any())
+                {
+                    @foreach (var offer in Model.Offers)
+                    {
+                        <tr>
+                            <td>@offer.CreatedAt?.ToString("g")</td>
+                            <td>$@offer.Amount</td>
+                            <td>@offer.OfferStatus</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center">No offers yet.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Create Offer Button -->
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOfferModal" @(Model.CanMakeOffer ? "" : "disabled")>
+            Make an Offer
+        </button>
+    </div>
+
+    <!-- Create Offer Modal -->
+    <div class="modal fade" id="createOfferModal" tabindex="-1" aria-labelledby="createOfferModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createOfferModalLabel">New Offer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-action="CreateOffer" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="propertyId" value="@Model.Property.Id" />
+                        <div class="mb-3">
+                            <label for="offerAmount" class="form-label">Offer Amount</label>
+                            <input type="number" name="amount" class="form-control" id="offerAmount" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit Offer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Información del agente -->
+    <div class="col-md-4 text-center">
+        <img src="@agent.PhotoUrl" class="rounded-circle img-fluid mb-3" alt="Foto del agente" style="max-width: 150px;" />
+        <h5>@agent.FullName</h5>
+        <p><strong>Teléfono:</strong> @agent.PhoneNumber</p>
+        <p><strong>Correo:</strong> @agent.Email</p>
+    </div>
+</div>

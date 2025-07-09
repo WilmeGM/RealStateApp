@@ -1,0 +1,61 @@
+﻿@model RealStateApp.Core.Application.ViewModels.Property.PropertyViewModel
+
+@{
+    var agent = (RealStateApp.Core.Application.ViewModels.Agent.AgentViewModel)ViewBag.Agent;
+}
+
+<h1 class="text-center my-4">Detalle de la Propiedad</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <!-- Slider de imágenes -->
+        <div id="propertyImagesCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @for (var i = 0; i < Model.ImageUrls.Count; i++)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img src="@Model.ImageUrls[i]" class="d-block w-100" alt="Imagen de la propiedad" />
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#propertyImagesCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#propertyImagesCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <!-- Información de la propiedad -->
+        <h2>@Model.PropertyType</h2>
+        <p><strong>Código:</strong> @Model.UniqueCode</p>
+        <p><strong>Tipo de Venta:</strong> @Model.SaleType</p>
+        <p><strong>Costo:</strong> @Model.Price.ToString("C")</p>
+        <p><strong>Habitaciones:</strong> @Model.RoomCount</p>
+        <p><strong>Baños:</strong> @Model.BathroomCount</p>
+        <p><strong>Tamaño:</strong> @Model.SizeInMeters mt²</p>
+        <p><strong>Descripción:</strong> @Model.Description</p>
+        <h4>Mejoras:</h4>
+        <ul>
+            @foreach (var improvement in Model.Improvements)
+            {
+                <li>@improvement.Name</li>
+            }
+        </ul>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <!-- Información del agente -->
+    <div class="col-md-4 text-center">
+        <img src="@agent.PhotoUrl" class="rounded-circle img-fluid mb-3" alt="Foto del agente" style="max-width: 150px;" />
+        <h5>@agent.FullName</h5>
+        <p><strong>Teléfono:</strong> @agent.PhoneNumber</p>
+        <p><strong>Correo:</strong> @agent.Email</p>
+    </div>
+</div>

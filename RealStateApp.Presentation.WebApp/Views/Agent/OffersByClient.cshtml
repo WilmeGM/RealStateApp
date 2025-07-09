@@ -1,0 +1,45 @@
+﻿@model List<RealStateApp.Core.Application.ViewModels.Offer.OfferViewModel>
+
+<h2 class="text-center my-4">Offers</h2>
+
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var offer in Model)
+            {
+                <tr>
+                    <td>@offer.CreatedAt?.ToString("g")</td>
+                    <td>@offer.Amount.ToString("C")</td>
+                    <td>
+                        <span class="badge @(offer.OfferStatus == "Pending" ? "bg-warning" : offer.OfferStatus == "Accepted" ? "bg-success" : "bg-danger")">
+                            @offer.OfferStatus
+                        </span>
+                    </td>
+                    <td>
+                        @if (offer.OfferStatus == "Pending")
+                        {
+                            <form asp-action="RespondToOffer" method="post" class="d-inline">
+                                <input type="hidden" name="offerId" value="@offer.Id" />
+                                <input type="hidden" name="propertyId" value="@ViewBag.PropertyId" />
+                                <button type="submit" name="response" value="accept" class="btn btn-success btn-sm">Accept</button>
+                                <button type="submit" name="response" value="reject" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

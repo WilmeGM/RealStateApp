@@ -1,0 +1,112 @@
+﻿@model RealStateApp.Core.Application.ViewModels.Property.SavePropertyViewModel
+
+<h2 class="text-center my-4">Edit Property</h2>
+
+<div class="container">
+    <form asp-action="EditProperty" asp-controller="Agent" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="UniqueCode" />
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="PropertyTypeId" class="form-label">Property Type</label>
+                <select asp-for="PropertyTypeId" class="form-select">
+                    <option value="">Select a property type</option>
+                    @foreach (var type in ViewBag.PropertyTypes as List<SelectListItem>)
+                    {
+                        <option value="@type.Value" selected="@(type.Value == $"{Model.PropertyTypeId}" ? "selected" : null)">
+                            @type.Text
+                        </option>
+                    }
+                </select>
+
+                <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="SaleTypeId" class="form-label">Sale Type</label>
+                <select asp-for="SaleTypeId" class="form-select">
+                    <option value="">Select a sale type</option>
+                    @foreach (var type in ViewBag.SaleTypes as List<SelectListItem>)
+                    {
+                        <option value="@type.Value" selected="@(type.Value == $"{Model.SaleTypeId}" ? "selected" : null)">
+                            @type.Text
+                        </option>
+                    }
+                </select>
+
+                <span asp-validation-for="SaleTypeId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Price" class="form-label">Price (DOP)</label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="SizeInMeters" class="form-label">Size (m²)</label>
+                <input asp-for="SizeInMeters" class="form-control" />
+                <span asp-validation-for="SizeInMeters" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="RoomCount" class="form-label">Rooms</label>
+                <input asp-for="RoomCount" class="form-control" />
+                <span asp-validation-for="RoomCount" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="BathroomCount" class="form-label">Bathrooms</label>
+                <input asp-for="BathroomCount" class="form-control" />
+                <span asp-validation-for="BathroomCount" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Improvements</label>
+            <select asp-for="ImprovementIds" class="form-select" multiple>
+                @foreach (var improvement in ViewBag.Improvements as List<SelectListItem>)
+                {
+                    <option value="@improvement.Value" selected="@(Model.ImprovementIds.Contains(int.Parse(improvement.Value)) ? "selected" : null)">
+                        @improvement.Text
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Current Images</label>
+            <div class="d-flex flex-wrap">
+                @if (Model.Images != null && Model.Images.Any())
+                {
+                    foreach (var image in Model.Images)
+                    {
+                        <div class="me-3">
+                            <img src="@image.FileName" alt="Property Image" class="img-thumbnail" style="max-width: 150px;" />
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">New Images (Optional, max 4)</label>
+            <input asp-for="Images" type="file" multiple class="form-control" />
+            <span asp-validation-for="Images" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a asp-action="PropertyMaintenance" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>

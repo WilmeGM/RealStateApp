@@ -1,0 +1,35 @@
+﻿@*Views/Client/Index*@
+
+@model List<RealStateApp.Core.Application.ViewModels.Property.PropertyViewModel>
+
+<h2 class="text-center my-4">Available favorites Properties</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var property in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@property.ImageUrls.FirstOrDefault()" class="card-img-top" alt="Property Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@property.PropertyType</h5>
+                        <p class="card-text">
+                            <strong>Price:</strong> @property.Price DOP<br>
+                            <strong>Size:</strong> @property.SizeInMeters m²<br>
+                            <strong>Rooms:</strong> @property.RoomCount<br>
+                            <strong>Bathrooms:</strong> @property.BathroomCount<br>
+                        </p>
+                        <form method="post" asp-action="ToggleFavorite" asp-controller="Client">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="propertyId" value="@property.Id" />
+                            <button type="submit" class="btn @(property.IsFavorite ? "btn-danger" : "btn-outline-secondary")">
+                                @(property.IsFavorite ? "Unfavorite" : "Favorite")
+                            </button>
+                        </form>
+                        <a asp-controller="Client" asp-action="ClientPropertyDetail" asp-route-id="@property.Id" class="btn btn-primary">View more</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,85 @@
+﻿@*Views/Home/Index*@
+
+@model List<RealStateApp.Core.Application.ViewModels.Property.PropertyViewModel>
+
+<h1 class="text-center my-4">Available Properties</h1>
+
+<!-- Search Form by Code -->
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="row">
+        <div class="col-md-6">
+            <label for="searchCode" class="form-label">Search by Code:</label>
+            <input type="text" id="searchCode" name="searchCode" value="@Context.Request.Query["searchCode"]" class="form-control" placeholder="Enter property code" />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+<!-- Filter Form -->
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="propertyTypeId" class="form-label">Property Type:</label>
+            <select id="propertyTypeId" name="propertyTypeId" class="form-select">
+                <option value="">Select</option>
+                @foreach (var item in ViewBag.PropertyTypes)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="minPrice" class="form-label">Minimum Price:</label>
+            <input type="number" id="minPrice" name="minPrice" value="@Context.Request.Query["minPrice"]" class="form-control" step="0.01" placeholder="0.00" />
+        </div>
+        <div class="col-md-2">
+            <label for="maxPrice" class="form-label">Maximum Price:</label>
+            <input type="number" id="maxPrice" name="maxPrice" value="@Context.Request.Query["maxPrice"]" class="form-control" step="0.01" placeholder="0.00" />
+        </div>
+        <div class="col-md-2">
+            <label for="bedrooms" class="form-label">Bedrooms:</label>
+            <input type="number" id="bedrooms" name="bedrooms" value="@Context.Request.Query["bedrooms"]" class="form-control" placeholder="N°" />
+        </div>
+        <div class="col-md-2">
+            <label for="bathrooms" class="form-label">Bathrooms:</label>
+            <input type="number" id="bathrooms" name="bathrooms" value="@Context.Request.Query["bathrooms"]" class="form-control" placeholder="N°" />
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+            <button type="submit" class="btn btn-success">Filter</button>
+        </div>
+    </div>
+</form>
+
+<!-- Properties Listing -->
+<div class="row">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var property in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <a asp-action="PropertyDetails" asp-route-id="@property.Id" class="stretched-link"></a>
+                    <img src="@(property.ImageUrls.FirstOrDefault() ?? "/img/default-property.jpg")" class="card-img-top" alt="Property Image" />
+                    <div class="card-body">
+                        <h5 class="card-title">@property.PropertyType</h5>
+                        <p class="card-text"><strong>Code:</strong> @property.UniqueCode</p>
+                        <p class="card-text"><strong>@property.SaleType:</strong> @property.Price.ToString("C")</p>
+                        <p class="card-text">
+                            <i class="fa fa-bed"></i> @property.RoomCount Beds |
+                            <i class="fa fa-bath"></i> @property.BathroomCount Baths |
+                            <i class="fa fa-expand"></i> @property.SizeInMeters m²
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-info text-center">No properties found with the applied filters.</div>
+        </div>
+    }
+</div>

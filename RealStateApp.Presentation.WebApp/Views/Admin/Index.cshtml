@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-primary">Admin Dashboard</h1>
+        <p class="lead text-muted">Manage and monitor system statistics effectively</p>
+    </div>
+
+    <!-- User Statistics Section -->
+    <div class="mb-5">
+        <h3 class="text-center text-secondary mb-4">User Statistics</h3>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <!-- Active Agents -->
+            <div class="col">
+                <div class="card border-success shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-success">Active Agents</h5>
+                        <p class="display-5 fw-bold">@ViewBag.ActiveAgentsCount</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inactive Agents -->
+            <div class="col">
+                <div class="card border-danger shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-danger">Inactive Agents</h5>
+                        <p class="display-5 fw-bold">@ViewBag.InactiveAgentsCount</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Clients -->
+            <div class="col">
+                <div class="card border-primary shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-primary">Active Clients</h5>
+                        <p class="display-5 fw-bold">@ViewBag.ActiveClientsCount</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inactive Clients -->
+            <div class="col">
+                <div class="card border-secondary shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-secondary">Inactive Clients</h5>
+                        <p class="display-5 fw-bold">@ViewBag.InactiveClintsCount</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Developers -->
+            <div class="col">
+                <div class="card border-info shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-info">Active Developers</h5>
+                        <p class="display-5 fw-bold">@ViewBag.ActiveDevlopersCount</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inactive Developers -->
+            <div class="col">
+                <div class="card border-dark shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">Inactive Developers</h5>
+                        <p class="display-5 fw-bold">@ViewBag.InactiveDevelopersCount</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Property Statistics Section -->
+    <div>
+        <h3 class="text-center text-secondary mb-4">Property Statistics</h3>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <!-- Available Properties -->
+            <div class="col">
+                <div class="card border-success shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-success">Available Properties</h5>
+                        <p class="display-5 fw-bold">@ViewBag.AvailablePropertiesCount</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sold Properties -->
+            <div class="col">
+                <div class="card border-warning shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-warning">Sold Properties</h5>
+                        <p class="display-5 fw-bold">@ViewBag.SoldPropertiesCount</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

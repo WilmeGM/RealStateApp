@@ -1,0 +1,51 @@
+﻿@model RealStateApp.Core.Application.ViewModels.Agent.UpdateAgentViewModel
+
+@{
+    ViewBag.Title = "My Profile";
+}
+
+<h2 class="text-center my-4">My Profile</h2>
+
+<div class="container">
+    <form asp-action="UpdateAgent" asp-controller="Agent" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="FirstName" class="form-label">First Name</label>
+                <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="LastName" class="form-label">Last Name</label>
+                <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                <input asp-for="PhoneNumber" class="form-control" placeholder="Enter your phone number" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Photo" class="form-label">Profile Photo</label>
+                <input asp-for="Photo" type="file" class="form-control" />
+                @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                {
+                    <div class="mt-2">
+                        <p>Current photo:</p>
+                        <img src="@Model.PhotoUrl" alt="Profile photo" class="img-fluid rounded" style="max-width: 150px;" />
+                    </div>
+                }
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a asp-action="Index" asp-controller="Agent" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>

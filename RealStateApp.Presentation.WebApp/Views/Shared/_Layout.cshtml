@@ -1,0 +1,194 @@
+﻿@using Microsoft.AspNetCore.Http
+@using RealStateApp.Core.Application.Enums
+@inject IHttpContextAccessor httpContextAccessor
+
+@{
+    var user = httpContextAccessor.HttpContext?.User;
+    var isAuthenticated = user?.Identity?.IsAuthenticated ?? false;
+    var isAdmin = isAuthenticated && user.IsInRole(Roles.Admin.ToString());
+    var isAgent = isAuthenticated && user.IsInRole(Roles.Agent.ToString());
+    var isClient = isAuthenticated && user.IsInRole(Roles.Client.ToString());
+    var isDeveloper = isAuthenticated && user.IsInRole(Roles.Developer.ToString());
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RSA</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="icon" href="~/iconfinder-home-4341294_120570.ico" type="image/x-icon" />
+    <style>
+        .navbar-custom {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+
+            .navbar-custom .navbar-brand,
+            .navbar-custom .nav-link {
+                color: white;
+            }
+
+                .navbar-custom .nav-link:hover {
+                    color: #ffcc00;
+                }
+
+        .dropdown-menu {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container-fluid">
+                @if (isAuthenticated)
+                {
+                    @if (isAdmin)
+                    {
+                        <a class="navbar-brand d-flex align-items-center" asp-controller="Admin" asp-action="Index">
+                            <i class="bi bi-gear-fill me-2"></i> Admin home
+                        </a>
+                    }
+
+                    @if (isAgent)
+                    {
+                        <a class="navbar-brand d-flex align-items-center" asp-controller="Agent" asp-action="Index">
+                            <i class="bi bi-house-door-fill me-2"></i> RSA
+                        </a>
+                    }
+
+                    @if (isClient)
+                    {
+                        <a class="navbar-brand d-flex align-items-center" asp-controller="Client" asp-action="Index">
+                            <i class="bi bi-house-door-fill me-2"></i> RSA
+                        </a>
+                    }
+                }
+                else
+                {
+                    <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house-door-fill me-2"></i> RSA
+                    </a>
+                }
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        @if (isAuthenticated)
+                        {
+                            @if (isAdmin)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Admin Options
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="AgentList">List Agents</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="AdminList">Manage Admins</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="DevelopersList">Manage Developers</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="PropertyTypeList">Manage Property Types</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="SaleTypeList">Manage Sale Types</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="ImprovementList">Manage Improvements</a></li>
+                                    </ul>
+                                </li>
+                            }
+
+                            @if (isAgent)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="agentDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Agent Options
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="agentDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Agent" asp-action="PropertyMaintenance">Manage properties</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Agent" asp-action="MyProfile">My Profile</a></li>
+                                    </ul>
+                                </li>
+                            }
+
+                            @if (isClient)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Client Options
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Client" asp-action="Index">Home</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Client" asp-action="AgentList">Agents</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Client" asp-action="FavoritesProperties">My favorites properties</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        @if (isAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-danger" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Home" asp-action="Agents">Agents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Account" asp-action="Index">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Account" asp-action="Register">Join the app</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="notification-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    </div>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showNotification(type, message) {
+            const iconMap = {
+                success: "bi-check-circle-fill text-success",
+                danger: "bi-exclamation-triangle-fill text-danger",
+                info: "bi-info-circle-fill text-info",
+                warning: "bi-exclamation-circle-fill text-warning"
+            };
+
+            const notification = $(`
+                        <div class="toast align-items-center text-bg-${type} border-0 shadow-sm" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    <i class="${iconMap[type]} me-2"></i>${message}
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    `);
+
+            $('#notification-container').append(notification);
+            const toast = new bootstrap.Toast(notification[0]);
+            toast.show();
+            setTimeout(() => notification.remove(), 5000);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

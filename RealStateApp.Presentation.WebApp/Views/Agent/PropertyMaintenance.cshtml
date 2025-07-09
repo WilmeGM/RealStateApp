@@ -1,0 +1,57 @@
+﻿@*Views/Agent/PropertyMaintance.cshtml*@
+
+@model List<RealStateApp.Core.Application.ViewModels.Property.PropertyViewModel>
+
+<h2 class="text-center my-4">Property Maintenance</h2>
+
+<div class="container">
+    <div class="d-flex justify-content-between mb-4">
+        <h3>Your Properties</h3>
+        <a asp-action="CreateProperty" class="btn btn-primary">Create Property</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Sale Type</th>
+                <th>Price</th>
+                <th>Rooms</th>
+                <th>Bathrooms</th>
+                <th>Size</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                foreach (var property in Model)
+                {
+                    <tr>
+                        <td>@property.UniqueCode</td>
+                        <td>@property.PropertyType</td>
+                        <td>@property.SaleType</td>
+                        <td>@property.Price.ToString("C")</td>
+                        <td>@property.RoomCount</td>
+                        <td>@property.BathroomCount</td>
+                        <td>@property.SizeInMeters</td>
+                        <td>
+                            <a asp-action="EditProperty" asp-route-id="@property.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <form asp-action="DeletePropertyConfirmed" asp-controller="Agent" onclick="return confirm('Are you sure do you want delete this property?')">
+                                <input type="hidden" value="@property.Id" name="id" />
+                                <button class="btn btn-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center">No properties available.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

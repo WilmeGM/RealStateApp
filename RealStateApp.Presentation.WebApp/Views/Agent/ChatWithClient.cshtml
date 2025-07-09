@@ -1,0 +1,35 @@
+﻿@*Views/Agent/ChatWithClient*@
+
+@model RealStateApp.Core.Application.ViewModels.ChatMessage.AgentChatViewModel
+
+<div class="container mt-5">
+    <h2 class="text-center">Chat with </h2>
+
+    <div id="chat-box" class="border p-3 mb-3" style="max-height: 400px; overflow-y: auto;">
+        @if (Model.Messages.Any())
+        {
+            @foreach (var message in Model.Messages)
+            {
+                <div class="mb-2">
+                    <strong class="text-@(message.IsSender ? "primary" : "secondary")">
+                        @(message.IsSender ? "You" : "Client"):
+                    </strong>
+                    <span>@message.Message</span>
+                    <small class="text-muted d-block">@message.CreatedAt?.ToString("g")</small>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-center text-muted">No messages yet. Start the conversation!</p>
+        }
+    </div>
+
+    <form asp-action="SendMessage" method="post">
+        <input type="hidden" name="clientId" value="@Model.ClientId" />
+        <div class="input-group">
+            <input type="text" name="message" class="form-control" placeholder="Type your message..." required />
+            <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+    </form>
+</div>

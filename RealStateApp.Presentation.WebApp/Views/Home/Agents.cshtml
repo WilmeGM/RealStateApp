@@ -1,0 +1,35 @@
+﻿@model List<RealStateApp.Core.Application.ViewModels.Agent.AgentViewModel>
+
+<h2 class="text-center my-4">Agent List</h2>
+
+<div class="container">
+    <form asp-action="Agents" asp-controller="Home" method="get" class="mb-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Agent name" value="@ViewData["Search"]" />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        @foreach (var agent in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card text-center">
+                    <img src="@agent.PhotoUrl" class="card-img-top rounded-circle mx-auto mt-3" style="width: 100px; height: 100px;" alt="Agent Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">@agent.FullName</h5>
+                        <a asp-action="AgentProperties" asp-controller="Home" asp-route-id="@agent.Id" class="btn btn-primary">
+                            See Properties
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Confirm Email";
+}
+
+<div class="row mt-5">
+    <div class="col-6 offset-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    <h2>@Model - <a class="btn btn-primary" asp-controller="Account" asp-action="Index">Log in</a></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
